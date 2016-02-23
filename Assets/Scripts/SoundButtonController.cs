@@ -20,4 +20,17 @@ public class SoundButtonController : MonoBehaviour {
     }
     private AudioSource _sound;
     private GameObject _hover;
+
+
+    public void Activate()
+    {
+        Hover.SetActive(true);
+        Sound.Play();
+    }
+
+    public void Deactivate()
+    {
+        Hover.SetActive(false);
+        Sound.Stop();
+    }
 }
