@@ -3,41 +3,43 @@ using System.Collections.Generic;
 
 public class InputController : MonoBehaviour {
 
-	private SoundButtonController[] buttons;
-	private List<SoundButtonController> currentHovers = new List<SoundButtonController>();
-	private List<SoundButtonController> deleteHovers = new List<SoundButtonController>();
+	private SoundButtonController[] _buttons;
+	private readonly List<SoundButtonController> _currentHovers = new List<SoundButtonController>();
+	private readonly List<SoundButtonController> _deleteHovers = new List<SoundButtonController>();
 
 	// Use this for initialization
 	void Start () {
-		buttons = GameObject.FindObjectsOfType<SoundButtonController>();
+		_buttons = FindObjectsOfType<SoundButtonController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-		foreach(SoundButtonController currentHover in currentHovers){
+		foreach(SoundButtonController currentHover in _currentHovers){
 			if(Input.GetMouseButton(0) && RectTransformUtility.RectangleContainsScreenPoint(currentHover.GetComponent<RectTransform>(),Input.mousePosition)){
 				return;
-			} else {
-				currentHover.hover.SetActive(false);
-				currentHover.sound.Stop();
-				deleteHovers.Add(currentHover);
 			}
+
+			currentHover.Hover.SetActive(false);
+			currentHover.Sound.Stop();
+			_deleteHovers.Add(currentHover);
 		}
-		currentHovers.RemoveAll(c => deleteHovers.Contains(c));
-		deleteHovers.Clear();
-		CheckMouse();
+		_currentHovers.RemoveAll(c => _deleteHovers.Contains(c));
+		_deleteHovers.Clear();
+	    if (Input.touches.Length > 0)
+	        return;  //TODO: do touch handling
+	    else
+	        CheckMouse();
 	}
 
-	void CheckMouse(){
+	private void CheckMouse(){
 		if (Input.GetMouseButton(0)){
-			foreach (SoundButtonController button in buttons){
+			foreach (SoundButtonController button in _buttons){
 				if(RectTransformUtility.RectangleContainsScreenPoint(button.GetComponent<RectTransform>(),Input.mousePosition)){
-					if(currentHovers.Contains(button))
+					if(_currentHovers.Contains(button))
 						return;
-					button.hover.SetActive(true);
-					button.sound.Play();
-					currentHovers.Add(button);
+					button.Hover.SetActive(true);
+					button.Sound.Play();
+					_currentHovers.Add(button);
 					return;
 				}
 			}
