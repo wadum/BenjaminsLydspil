@@ -24,9 +24,9 @@ public class InputController : MonoBehaviour {
     {
         if (Input.touchCount <= 0)
         {
-            foreach (var entry in _currentHovers)
+			foreach (var button in _currentHovers.Values)
             {
-                entry.Value.Deactivate();
+				GameManager.Game.ReleasedButton(button);
             }
             _currentHovers.Clear();
         }
@@ -41,7 +41,7 @@ public class InputController : MonoBehaviour {
                 SoundButtonController unusedButton;
                 _currentHovers.TryGetValue(unusedId, out unusedButton);
                 if (!unusedButton) continue;
-                unusedButton.Deactivate();
+				GameManager.Game.ReleasedButton(unusedButton);
             }
         }
     }
@@ -57,7 +57,7 @@ public class InputController : MonoBehaviour {
         {
             if (!IsPointInButton(touch.position, button))
             {
-                button.Deactivate();
+				GameManager.Game.ReleasedButton(button);
                 _currentHovers.Remove(touch.fingerId);
             }
             else
@@ -72,7 +72,7 @@ public class InputController : MonoBehaviour {
         button = GetHoveredButton(touch.position);
 
         if (!button) return;
-        button.Activate();
+		GameManager.Game.PressedButton(button);
         _currentHovers.Add(touch.fingerId, button);
 
     }
@@ -82,7 +82,7 @@ public class InputController : MonoBehaviour {
         if (!Input.GetMouseButton(0))
         {
             if (!_currentMouseHover) return;
-            _currentMouseHover.Deactivate();
+			GameManager.Game.ReleasedButton(_currentMouseHover);
             _currentMouseHover = null;
         }
         else
@@ -91,7 +91,7 @@ public class InputController : MonoBehaviour {
             {
                 if (!IsPointInButton(Input.mousePosition, _currentMouseHover))
                 {
-                    _currentMouseHover.Deactivate();
+					GameManager.Game.ReleasedButton(_currentMouseHover);
                     _currentMouseHover = null;
                 }
                 else
@@ -104,7 +104,7 @@ public class InputController : MonoBehaviour {
 
             if (!button) return;
 
-            button.Activate();
+			GameManager.Game.PressedButton(button);
             _currentMouseHover = button;
 
         }
