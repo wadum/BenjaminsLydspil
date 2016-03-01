@@ -17,24 +17,20 @@ namespace Steps
         {
             if (Voice)
             {
-                Voice.Play();
                 StartCoroutine(NextStepWhenDone());
             }
             else
             {
-                if (GameManager.Game.CurrentLevel.Current.CurrentStep.Current == this)
-                    GameManager.Game.CurrentLevel.Current.NextStep(false);
+                NextStep();
             }
         }
 
         private IEnumerator NextStepWhenDone()
         {
-            while (Voice.isPlaying)
-            {
-                yield return null;
-            }
-            if (GameManager.Game.CurrentLevel.Current.CurrentStep.Current == this)
-                GameManager.Game.CurrentLevel.Current.NextStep(false);
+            Voice.Play();
+            yield return new WaitForSeconds(Voice.clip.length);
+            NextStep();
+            StopAllCoroutines();
         }
     }
 }

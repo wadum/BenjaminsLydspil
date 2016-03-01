@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Game;
 
     public AudioSource CorrectVoice;
+    public AudioSource WrongVoice;
 
     public IEnumerator<Level> CurrentLevel;
 
@@ -23,6 +24,8 @@ public class GameManager : MonoBehaviour
             throw new ApplicationException("No levels to play!");
         if (!CorrectVoice)
             throw new ApplicationException("Need to set correct voice.");
+        if (!WrongVoice)
+            throw new ApplicationException("Need to set wrong voice.");
         StartGame();
     }
 
@@ -30,6 +33,17 @@ public class GameManager : MonoBehaviour
     {
         if (CorrectVoice)
             CorrectVoice.Play();
+    }
+
+    public void PlayWrong()
+    {
+        if (WrongVoice)
+            WrongVoice.Play();
+    }
+
+    public bool ControlVoicePlaying()
+    {
+        return (CorrectVoice && CorrectVoice.isPlaying) || (WrongVoice && WrongVoice.isPlaying);
     }
 
     public void NextLevel()
@@ -53,7 +67,7 @@ public class GameManager : MonoBehaviour
 
     public void PressedButton(SoundButtonController button)
     {
-        if (CorrectVoice && !CorrectVoice.isPlaying) CurrentLevel.Current.HandleInput(button);
+        if (!ControlVoicePlaying()) CurrentLevel.Current.HandleInput(button);
         button.Activate();
     }
 

@@ -20,28 +20,19 @@ public class Level : MonoBehaviour
 
     public bool HandleInput(SoundButtonController sb)
     {
-        // Step was not completed this frame.
-        if (!CurrentStep.Current.HandleInput(sb)) return false;
-
-        NextStep(true);
-        return true;
+        return CurrentStep.Current.HandleInput(sb);
     }
 
-    public void NextStep(bool Correct)
+    public void NextStep()
     {
-        if (Correct)
-        {
-            GameManager.Game.PlayCorrect();
-        }
-
         StartCoroutine(ContinueAfterCorrectVoice());
     }
 
     private IEnumerator ContinueAfterCorrectVoice()
     {
-        while (GameManager.Game.CorrectVoice.isPlaying)
+        yield return null;
+        while (GameManager.Game.ControlVoicePlaying())
             yield return null;
-        Debug.Log("Completed Step: " + CurrentStep.Current.gameObject.name);
         if (!CurrentStep.MoveNext())
         {
             // No more steps to play in level. Moving to next level.

@@ -6,19 +6,34 @@ namespace Steps
     {
         public AudioClip Clip;
 
+        private int _timesTried;
+        public int WrongVoiceAfterTimes = 5;
+
         public override bool HandleInput(SoundButtonController sb)
         {
-            Debug.Log(sb.Sound.clip.name);
+            if (sb.Sound.clip.name == Clip.name)
+            {
+                GameManager.Game.PlayCorrect();
+                NextStep();
+            }
+            else
+            {
+                _timesTried++;
+                if (_timesTried%WrongVoiceAfterTimes == 0)
+                {
+                    GameManager.Game.PlayWrong();
+                }
+            }
             return sb.Sound.clip.name == Clip.name;
         }
 
         public override void Play()
         {
+            _timesTried = 0;
             if (Clip) return;
 
             Debug.Log("Clip not existing");
-            if (GameManager.Game.CurrentLevel.Current.CurrentStep.Current == this)
-                GameManager.Game.CurrentLevel.Current.NextStep(false);
+            NextStep();
         }
     }
 }
