@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SoundButtonController : MonoBehaviour {
+public class SoundButtonController : MonoBehaviour
+{
+
+    private Coroutine _stopPlaying;
+    private readonly float _timeToStopPlaying = 0.2f;
 
     public GameObject Hover
     {
@@ -24,6 +28,10 @@ public class SoundButtonController : MonoBehaviour {
 
     public void Activate()
     {
+        if (_stopPlaying != null)
+        {
+            RemoveStopPlaying();
+        }
         Hover.SetActive(true);
         Sound.Play();
     }
@@ -31,6 +39,30 @@ public class SoundButtonController : MonoBehaviour {
     public void Deactivate()
     {
         Hover.SetActive(false);
-        Sound.Stop();
+        _stopPlaying = StartCoroutine(StopPlaying());
     }
+
+    private IEnumerator StopPlaying()
+    {
+        var time = Time.time;
+
+        while (time + _timeToStopPlaying > Time.time)
+        {
+            Sound.volume = 1 - ((Time.time - time) / _timeToStopPlaying);
+            Debug.Log(Sound.volume);
+            yield return null;
+        }
+
+        Sound.Stop();
+
+        RemoveStopPlaying();
+    }
+
+    private void RemoveStopPlaying()
+    {
+        StopCoroutine(_stopPlaying);
+        Sound.volume = 1;
+        _stopPlaying = null;
+    }
+
 }
