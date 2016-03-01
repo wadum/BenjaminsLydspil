@@ -49,7 +49,6 @@ public class SoundButtonController : MonoBehaviour
         while (time + _timeToStopPlaying > Time.time)
         {
             Sound.volume = 1 - ((Time.time - time) / _timeToStopPlaying);
-            Debug.Log(Sound.volume);
             yield return null;
         }
 
