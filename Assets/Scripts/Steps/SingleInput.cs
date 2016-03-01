@@ -1,12 +1,9 @@
-﻿using System.Diagnostics;
-using UnityEngine;
-using Debug = UnityEngine.Debug;
+﻿using UnityEngine;
 
 namespace Steps
 {
     public class SingleInput : Step
     {
-
         public AudioClip Clip;
 
         public override bool HandleInput(SoundButtonController sb)

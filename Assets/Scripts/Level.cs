@@ -1,17 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    public List<Step> Steps = new List<Step>();
-
     public IEnumerator<Step> CurrentStep;
+    public List<Step> Steps = new List<Step>();
 
     public void Play()
     {
         // If the level contains no steps, just skip it.
-        if(Steps.Count == 0)
+        if (Steps.Count == 0)
             CompletedLevel();
 
         CurrentStep = Steps.GetEnumerator();
@@ -30,7 +29,6 @@ public class Level : MonoBehaviour
 
     public void NextStep(bool Correct)
     {
-
         if (Correct)
         {
             GameManager.Game.PlayCorrect();
@@ -52,7 +50,6 @@ public class Level : MonoBehaviour
 
         // Start the next step.
         CurrentStep.Current.Play();
-
     }
 
     protected void CompletedLevel()

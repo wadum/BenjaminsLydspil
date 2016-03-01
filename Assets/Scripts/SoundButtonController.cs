@@ -1,11 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class SoundButtonController : MonoBehaviour
 {
+    private readonly float _timeToStopPlaying = 0.2f;
+    private GameObject _hover;
+    private AudioSource _sound;
 
     private Coroutine _stopPlaying;
-    private readonly float _timeToStopPlaying = 0.2f;
 
     public GameObject Hover
     {
@@ -16,14 +18,14 @@ public class SoundButtonController : MonoBehaviour
         }
     }
 
-    public AudioSource Sound {
+    public AudioSource Sound
+    {
         get
         {
-            if (!_sound) _sound = GetComponent<AudioSource>(); return _sound; 
+            if (!_sound) _sound = GetComponent<AudioSource>();
+            return _sound;
         }
     }
-    private AudioSource _sound;
-    private GameObject _hover;
 
 
     public void Activate()
@@ -48,7 +50,7 @@ public class SoundButtonController : MonoBehaviour
 
         while (time + _timeToStopPlaying > Time.time)
         {
-            Sound.volume = 1 - ((Time.time - time) / _timeToStopPlaying);
+            Sound.volume = 1 - (Time.time - time)/_timeToStopPlaying;
             yield return null;
         }
 
@@ -63,5 +65,4 @@ public class SoundButtonController : MonoBehaviour
         Sound.volume = 1;
         _stopPlaying = null;
     }
-
 }

@@ -1,14 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Steps
 {
-
-    [RequireComponent(typeof(AudioSource))]
+    [RequireComponent(typeof (AudioSource))]
     public class PlayVoice : Step
     {
-
         public AudioSource Voice;
 
         public override bool HandleInput(SoundButtonController sb)
@@ -25,7 +22,7 @@ namespace Steps
             }
             else
             {
-                if(GameManager.Game.CurrentLevel.Current.CurrentStep.Current == this)
+                if (GameManager.Game.CurrentLevel.Current.CurrentStep.Current == this)
                     GameManager.Game.CurrentLevel.Current.NextStep(false);
             }
         }
