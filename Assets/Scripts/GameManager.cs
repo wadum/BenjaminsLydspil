@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     public AudioSource CorrectVoice;
     public AudioSource WrongVoice;
 
+    public AudioSource ErrorSound;
+    public AudioSource CorrectSound;
+
     public IEnumerator<Level> CurrentLevel;
 
     public List<Level> Levels = new List<Level>();
@@ -26,6 +29,10 @@ public class GameManager : MonoBehaviour
             throw new ApplicationException("Need to set correct voice.");
         if (!WrongVoice)
             throw new ApplicationException("Need to set wrong voice.");
+        if (!ErrorSound)
+            throw new ApplicationException("Need to set error sound.");
+        if (!CorrectSound)
+            throw new ApplicationException("Need to set correct sound.");
         StartGame();
     }
 
@@ -39,6 +46,18 @@ public class GameManager : MonoBehaviour
     {
         if (WrongVoice)
             WrongVoice.Play();
+    }
+
+    public void PlayErrorSound()
+    {
+        if (ErrorSound)
+            ErrorSound.Play();
+    }
+
+    public void PlayCorrectSound()
+    {
+        if (CorrectSound)
+            CorrectSound.Play();
     }
 
     public bool ControlVoicePlaying()
