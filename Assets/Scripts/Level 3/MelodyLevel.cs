@@ -30,7 +30,7 @@ namespace Level_3
 
         public Melody[] Melodies;
 
-        public int TimesToCompleteLevel = 2;
+        //public int TimesToCompleteLevel = 2;
 
         //Used to be able to play both sounds at once
         public AudioSource[] Tunes;
@@ -58,11 +58,11 @@ namespace Level_3
         private void Update()
         {
             //if we have completed the lvl enough times stop requesting the player to play it
-            if (AmountOfLvlCompleted >= TimesToCompleteLevel)
+            /*if (AmountOfLvlCompleted >= TimesToCompleteLevel)
             {
                 GameManager.Game.NextLevel();
                 return;
-            }
+            }*/
             // If we have conpleted or started the level and need a new intro get it
             if (_intro && !_introRunning)
             {
@@ -166,6 +166,7 @@ namespace Level_3
         {
             _ic.enabled = false;
             _endingRunning = true;
+            yield return new WaitForSeconds(1);
             yield return new WaitForSeconds(GameManager.Game.PlayCorrectSound());
             yield return new WaitForSeconds(GameManager.Game.PlayCorrect());
             _endingRunning = false;
@@ -173,7 +174,12 @@ namespace Level_3
             _levelCompleted = true;
             _intro = true;
 
+            Tuneprogression = 0;
             AmountOfLvlCompleted += 1;
+            if (LengthOfTuneSequence < 6)
+            {
+                LengthOfTuneSequence += 1;
+            }
 
             yield return null;
         }
