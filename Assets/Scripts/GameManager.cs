@@ -14,8 +14,12 @@ public class GameManager : MonoBehaviour
 
     public AudioSource ErrorSound;
 
+    public AudioSource WelcomeToSoundGame;
+
     public List<GameObject> Levels = new List<GameObject>();
     public AudioSource WrongVoice;
+
+    private InputController _ic;
 
     private void Start()
     {
@@ -34,7 +38,10 @@ public class GameManager : MonoBehaviour
             throw new ApplicationException("Need to set error sound.");
         if (!CorrectSound)
             throw new ApplicationException("Need to set correct sound.");
-        StartGame();
+
+        _ic = FindObjectOfType<InputController>();
+
+        StartCoroutine(StartGame());
     }
 
     public float PlayCorrect()
@@ -76,22 +83,35 @@ public class GameManager : MonoBehaviour
         if (!CurrentLevel.MoveNext())
         {
             // No more levels to play. Restarting.
-            StartGame();
+            StartCoroutine(StartGame());
         }
 
         // Start the next level.
         CurrentLevel.Current.SetActive(true);
     }
 
-    public void StartGame()
+    public IEnumerator StartGame()
     {
+        _ic.enabled = false;
         foreach (var level in Levels)
         {
             level.SetActive(false);
         }
+
+        WelcomeToSoundGame.Play();
+
+        while (WelcomeToSoundGame.isPlaying)
+        {
+            yield return null;
+        }
+
         CurrentLevel = Levels.GetEnumerator();
         CurrentLevel.MoveNext();
         CurrentLevel.Current.SetActive(true);
+
+        _ic.enabled = true;
+
+        yield return null;
     }
 
     public void PressedButton(SoundButtonController button)
