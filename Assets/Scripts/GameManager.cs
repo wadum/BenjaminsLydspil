@@ -36,28 +36,32 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
-    public void PlayCorrect()
+    public float PlayCorrect()
     {
         if (CorrectVoice)
             CorrectVoice.Play();
+        return CorrectVoice.clip.length;
     }
 
-    public void PlayWrong()
+    public float PlayWrong()
     {
         if (WrongVoice)
             WrongVoice.Play();
+        return WrongVoice.clip.length;
     }
 
-    public void PlayErrorSound()
+    public float PlayErrorSound()
     {
         if (ErrorSound)
             ErrorSound.Play();
+        return ErrorSound.clip.length;
     }
 
-    public void PlayCorrectSound()
+    public float PlayCorrectSound()
     {
         if (CorrectSound)
             CorrectSound.Play();
+        return CorrectSound.clip.length;
     }
 
     public bool ControlVoicePlaying()

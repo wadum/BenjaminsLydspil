@@ -6,10 +6,9 @@ using Random = UnityEngine.Random;
 
 public class AcoordLevel : MonoBehaviour
 {
-    public int _correctMelody; // This could be private just to see that it take a new chord every time it plays
+    public int CorrectMelody; // This could be private just to see that it take a new chord every time it plays
     private bool _endingRunning; // Is the ending running
 
-    private bool _error; //Did the player make an error e.g. holding the wrong button
     private bool _intro = true; //Should the script give us a intro
     private bool _introRunning; // Is the intro running
     private bool _levelCompleted = true; // Used to make a new Chord to find 
@@ -82,7 +81,7 @@ public class AcoordLevel : MonoBehaviour
         if (Hovers
             .Where(
                 hover =>
-                    hover.activeInHierarchy).All(activeHover => Chords[_correctMelody].chord.Any(
+                    hover.activeInHierarchy).All(activeHover => Chords[CorrectMelody].chord.Any(
                         c => c.name == activeHover.GetComponentInParent<AudioSource>().clip.name)))
         {
             StartCoroutine(Ending());
@@ -96,14 +95,14 @@ public class AcoordLevel : MonoBehaviour
         //Choose new Correct Chord
         if (_levelCompleted)
         {
-            _correctMelody = Random.Range(0, Chords.Length);
+            CorrectMelody = Random.Range(0, Chords.Length);
             _levelCompleted = false;
         }
 
         // Play Tunes
-        for (var i = 0; i < Chords[_correctMelody].chord.Length; i++)
+        for (var i = 0; i < Chords[CorrectMelody].chord.Length; i++)
         {
-            Tunes[i].clip = Chords[_correctMelody].chord[i];
+            Tunes[i].clip = Chords[CorrectMelody].chord[i];
             Tunes[i].Play();
             yield return new WaitForSeconds(0.5f);
         }
@@ -131,16 +130,8 @@ public class AcoordLevel : MonoBehaviour
     private IEnumerator Ending()
     {
         _endingRunning = true;
-        GameManager.Game.PlayCorrectSound();
-        if (GameManager.Game.CorrectSound.isPlaying)
-        {
-            yield return null;
-        }
-        GameManager.Game.PlayCorrect();
-        if (GameManager.Game.ControlVoicePlaying())
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(GameManager.Game.PlayCorrectSound());
+        yield return new WaitForSeconds(GameManager.Game.PlayCorrect());
         _endingRunning = false;
         _levelCompleted = true;
         _intro = true;

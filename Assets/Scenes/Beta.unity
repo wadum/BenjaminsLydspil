@@ -1943,11 +1943,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76e84487673ebc4408283325e29ef054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tunes:
-  - {fileID: 1026402244}
-  VoicePlayer: {fileID: 1026402242}
-  FindTonerne: {fileID: 8300000, guid: 32f7e0021b02b2f4ebe1e7e8733f13f4, type: 3}
-  ForkerteToner: {fileID: 8300000, guid: c9fd835af00a756418b07a36d7532d08, type: 3}
+  CorrectMelody: 0
+  AmountOfLvlCompleted: 0
   Chords:
   - chord:
     - {fileID: 8300000, guid: 3d3814bf27f644c71b537a52da10d301, type: 3}
@@ -1968,7 +1965,9 @@ MonoBehaviour:
   - chord:
     - {fileID: 8300000, guid: e023aa7298cdb4a88b98f03e260883ff, type: 3}
   - chord:
-    - {fileID: 8300000, guid: 4edd1abcb6ef24e179b8f8d4adc1c1b5, type: 3}
+    - {fileID: 8300000, guid: cfb11d57656754561b299feee6638e72, type: 3}
+  FindTonerne: {fileID: 8300000, guid: 32f7e0021b02b2f4ebe1e7e8733f13f4, type: 3}
+  ForkerteToner: {fileID: 8300000, guid: c9fd835af00a756418b07a36d7532d08, type: 3}
   Hovers:
   - {fileID: 1657112386}
   - {fileID: 268029301}
@@ -1980,9 +1979,10 @@ MonoBehaviour:
   - {fileID: 362345824}
   - {fileID: 553513391}
   - {fileID: 568629383}
-  _correctMelody: 0
   TimesToCompleteLevel: 2
-  AmountOfLvlCompleted: 0
+  Tunes:
+  - {fileID: 1026402244}
+  VoicePlayer: {fileID: 1026402242}
 --- !u!1 &1036218586
 GameObject:
   m_ObjectHideFlags: 0
@@ -2226,12 +2226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76e84487673ebc4408283325e29ef054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tunes:
-  - {fileID: 1173577729}
-  - {fileID: 1173577730}
-  VoicePlayer: {fileID: 1173577731}
-  FindTonerne: {fileID: 8300000, guid: 813b4edf2d8ce744ea3c3129aab47ae9, type: 3}
-  ForkerteToner: {fileID: 8300000, guid: 0524d736b8667604598708b1dc9fca74, type: 3}
+  CorrectMelody: 0
+  AmountOfLvlCompleted: 0
   Chords:
   - chord:
     - {fileID: 8300000, guid: 3d3814bf27f644c71b537a52da10d301, type: 3}
@@ -2290,6 +2286,8 @@ MonoBehaviour:
   - chord:
     - {fileID: 8300000, guid: 4d339a31e88c144e88237cdc91ca6da6, type: 3}
     - {fileID: 8300000, guid: cfb11d57656754561b299feee6638e72, type: 3}
+  FindTonerne: {fileID: 8300000, guid: 813b4edf2d8ce744ea3c3129aab47ae9, type: 3}
+  ForkerteToner: {fileID: 8300000, guid: 0524d736b8667604598708b1dc9fca74, type: 3}
   Hovers:
   - {fileID: 1657112386}
   - {fileID: 268029301}
@@ -2301,9 +2299,11 @@ MonoBehaviour:
   - {fileID: 362345824}
   - {fileID: 553513391}
   - {fileID: 568629383}
-  _correctMelody: 0
   TimesToCompleteLevel: 2
-  AmountOfLvlCompleted: 0
+  Tunes:
+  - {fileID: 1173577729}
+  - {fileID: 1173577730}
+  VoicePlayer: {fileID: 1173577731}
 --- !u!82 &1173577729
 AudioSource:
   m_ObjectHideFlags: 0
