@@ -4,9 +4,10 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AcoordLevel : MonoBehaviour
-{
+public class MelodyLevel : MonoBehaviour {
+
     public int CorrectMelody; // This could be private just to see that it take a new chord every time it plays
+    public int LengthOfTuneSequence = 3;
     private bool _endingRunning; // Is the ending running
 
     private bool _intro = true; //Should the script give us a intro
@@ -14,11 +15,10 @@ public class AcoordLevel : MonoBehaviour
     private bool _levelCompleted = true; // Used to make a new Chord to find 
     public int AmountOfLvlCompleted;
 
-
-    public Chord[] Chords;
+    public int _tuneprogression = 0;
 
     //Voice Clips
-    public AudioClip FindTonerne, ForkerteToner;
+    public AudioClip EfterlignMelodien, ForkertMelodi;
 
     //list of the Hovers on the buttons
     public GameObject[] Hovers;
@@ -31,6 +31,8 @@ public class AcoordLevel : MonoBehaviour
     //Playing voice sounds
     public AudioSource VoicePlayer;
 
+    public Melody[] Melodies;
+
     private InputController _ic;
 
     // Looks if all the chords created in the inspector is filled and does not have the same tunes to play twise
@@ -38,11 +40,11 @@ public class AcoordLevel : MonoBehaviour
     {
         AmountOfLvlCompleted = 0;
 
-        if (Chords.Any(t => !Chords.All(c => c.chord.All(a => a != null))))
+        if (Melodies.Any(t => !Melodies.All(c => c.melody.All(a => a != null))))
         {
             throw new ApplicationException("Some Chords havent been set");
         }
-        if (Chords.Any(t => !Chords.All(c => c.chord.Distinct().ToList().Count == c.chord.Length)))
+        if (Melodies.Any(t => !Melodies.All(c => c.melody.Distinct().ToList().Count == c.melody.Length)))
         {
             throw new ApplicationException("Some Chords have 2 of the same tunes");
         }
@@ -69,25 +71,34 @@ public class AcoordLevel : MonoBehaviour
             return;
         }
 
-        //reset the active hover count
         var activeHoverCount = Hovers.Count(hover => hover.activeInHierarchy);
 
-        Debug.Log(activeHoverCount);
-
-        //If we have more active hovers then 2 then its wrong since there is only going to be 2 for any given chord
-        if (activeHoverCount != Tunes.Length)
+        if (activeHoverCount >= 2) //iff we press more than one button at a time we are doing it wrong
         {
+            _tuneprogression = 0;
             return;
         }
-        //HER HVIS MAN HAR PRØVET FOR MANGE GANGE AFSPIL INTRO IGEN DEN VÆLGER IKKE EN NY MELODI DA _levelCompleted IKKE BLIVER SAT TIL true
 
+        //if there is a hover active with the wrong name reset the melody stuff
+        if (Hovers
+            .Where(
+                hover =>
+                    hover.activeInHierarchy && hover.GetComponentInParent<AudioSource>().clip.name != Tunes[_tuneprogression].name).ToList().Count > 0)
+        {
+            _tuneprogression = 0;
+        }
 
         //If we saw no errors and the correct number of hovers are active then we must have activated the correct buttons
         if (Hovers
             .Where(
                 hover =>
-                    hover.activeInHierarchy).All(activeHover => Chords[CorrectMelody].chord.Any(
-                        c => c.name == activeHover.GetComponentInParent<AudioSource>().clip.name)))
+                    hover.activeInHierarchy && hover.GetComponentInParent<AudioSource>().clip.name == Tunes[_tuneprogression].name).ToList().Count > 0)
+        {
+            _tuneprogression++;
+        }
+
+
+        if (_tuneprogression >= LengthOfTuneSequence)
         {
             StartCoroutine(Ending());
         }
@@ -101,29 +112,34 @@ public class AcoordLevel : MonoBehaviour
         //Choose new Correct Chord
         if (_levelCompleted)
         {
-            CorrectMelody = Random.Range(0, Chords.Length);
+            CorrectMelody = Random.Range(0, Melodies.Length);
+
+            for (var i = 0; i < LengthOfTuneSequence; i++)
+            {
+                Tunes[i].clip = Melodies[CorrectMelody].melody[Random.Range(0, Melodies[CorrectMelody].melody.Length)]; //Choose at random the tunes from the correct melody section
+                Tunes[i].Play();
+                yield return new WaitForSeconds(1f);
+                Tunes[i].Stop();
+            }
             _levelCompleted = false;
         }
-
-        // Play Tunes
-        for (var i = 0; i < Chords[CorrectMelody].chord.Length; i++)
+        else
         {
-            Tunes[i].clip = Chords[CorrectMelody].chord[i];
-            Tunes[i].Play();
-            yield return new WaitForSeconds(0.5f);
+            for (var i = 0; i < Melodies[CorrectMelody].melody.Length; i++)
+            {
+                Tunes[i].Play();
+                yield return new WaitForSeconds(1f);
+                Tunes[i].Stop();
+            }
         }
 
-        yield return new WaitForSeconds(2.5f);
+        
 
-        VoicePlayer.clip = FindTonerne;
+        VoicePlayer.clip = EfterlignMelodien;
         VoicePlayer.Play();
 
         yield return new WaitForSeconds(VoicePlayer.clip.length);
-
-        //Stop everything so the player can start playing
-        foreach (var tune in Tunes)
-            tune.Stop();
-
+       
         _intro = false;
         _introRunning = false;
         _ic.enabled = true;
@@ -149,8 +165,8 @@ public class AcoordLevel : MonoBehaviour
 
     //Nested list with chords provided by benjamin
     [Serializable]
-    public struct Chord
+    public struct Melody
     {
-        public AudioClip[] chord;
+        public AudioClip[] melody;
     }
 }
