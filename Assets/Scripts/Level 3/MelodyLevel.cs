@@ -86,9 +86,17 @@ namespace Level_3
             if (Hovers
                 .Where(
                     hover =>
-                        hover.activeInHierarchy &&
-                        hover.GetComponentInParent<AudioSource>().clip.name != Tunes[Tuneprogression].clip.name).ToList().Count >
+                        hover.activeInHierarchy && Tuneprogression > 0 &&
+                        hover.GetComponentInParent<AudioSource>().clip.name == Tunes[Tuneprogression-1].clip.name).ToList().Count >
                 0)
+            {
+                // pass
+            } else if (Hovers
+               .Where(
+                   hover =>
+                       hover.activeInHierarchy &&
+                       hover.GetComponentInParent<AudioSource>().clip.name != Tunes[Tuneprogression].clip.name).ToList().Count >
+               0)
             {
                 Tuneprogression = 0;
             }
