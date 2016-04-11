@@ -30,6 +30,8 @@ public class AcoordLevel : MonoBehaviour
     //Playing voice sounds
     public AudioSource VoicePlayer;
 
+    private InputController _ic;
+
     // Looks if all the chords created in the inspector is filled and does not have the same tunes to play twise
     private void Start()
     {
@@ -43,6 +45,8 @@ public class AcoordLevel : MonoBehaviour
         {
             throw new ApplicationException("Some Chords have 2 of the same tunes");
         }
+
+        _ic = FindObjectOfType<InputController>();
     }
 
     private void Update()
@@ -91,6 +95,7 @@ public class AcoordLevel : MonoBehaviour
     //Sets up the game
     private IEnumerator Intro()
     {
+        _ic.enabled = false;
         _introRunning = true;
         //Choose new Correct Chord
         if (_levelCompleted)
@@ -123,16 +128,19 @@ public class AcoordLevel : MonoBehaviour
 
         _intro = false;
         _introRunning = false;
+        _ic.enabled = true;
         yield return null;
     }
 
     // Ends the game and makes sure a new starts
     private IEnumerator Ending()
     {
+        _ic.enabled = false;
         _endingRunning = true;
         yield return new WaitForSeconds(GameManager.Game.PlayCorrectSound());
         yield return new WaitForSeconds(GameManager.Game.PlayCorrect());
         _endingRunning = false;
+        _ic.enabled = true;
         _levelCompleted = true;
         _intro = true;
 
