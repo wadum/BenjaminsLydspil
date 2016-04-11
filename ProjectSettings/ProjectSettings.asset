@@ -89,7 +89,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleIdentifier: dk.ChrisRasmus.Lydspillet
+  bundleIdentifier: dk.ChrisRasmum.Lydspillet
   bundleVersion: 2.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
