@@ -27,6 +27,9 @@ public class AcoordLevel : MonoBehaviour {
 
 
     public int _correctMelody; // This could be private just to see that it take a new chord every time it plays
+
+    public int TimesToCompleteLevel = 2;
+    public int AmountOfLvlCompleted = 0;
     private bool _levelCompleted = true; // Used to make a new Chord to find 
     private bool _intro = true; //Should the script give us a intro
     private bool _introRunning = false; // Is the intro running
@@ -36,7 +39,10 @@ public class AcoordLevel : MonoBehaviour {
 
     // Looks if all the chords created in the inspector is filled and does not have the same tunes to play twise
     void Start () {
-	    for(int i = 0; i < Chords.Length; i++)
+
+        AmountOfLvlCompleted = 0;
+
+        for (int i = 0; i < Chords.Length; i++)
         {
             if (!(Chords[i].chord[0] && Chords[i].chord[1]))
             {
@@ -50,6 +56,11 @@ public class AcoordLevel : MonoBehaviour {
 	}
 	
 	void Update () {
+        //if we have completed the lvl enough times stop requesting the player to play it
+        if(AmountOfLvlCompleted >= TimesToCompleteLevel)
+        {
+            return;
+        }
         // If we have conpleted or started the level and need a new intro get it
         if (_intro && !_introRunning)
         {
@@ -153,6 +164,9 @@ public class AcoordLevel : MonoBehaviour {
         _endingRunning = false;
         _levelCompleted = true;
         _intro = true;
+
+        AmountOfLvlCompleted += 1;
+
         yield return null;
     }
 }
