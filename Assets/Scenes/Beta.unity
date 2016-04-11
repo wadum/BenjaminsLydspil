@@ -4437,7 +4437,17 @@ MonoBehaviour:
   CorrectMelody: 0
   EfterlignMelodien: {fileID: 8300000, guid: 88c684aa9bf06084fa6d6f2ef135d821, type: 3}
   ForkertMelodi: {fileID: 8300000, guid: 76c5fdfa9a58cc14b92856856c1245b1, type: 3}
-  Hovers: []
+  Hovers:
+  - {fileID: 1657112386}
+  - {fileID: 268029301}
+  - {fileID: 733928766}
+  - {fileID: 1924984671}
+  - {fileID: 1916419395}
+  - {fileID: 1107072593}
+  - {fileID: 1431957504}
+  - {fileID: 362345824}
+  - {fileID: 553513391}
+  - {fileID: 568629383}
   LengthOfTuneSequence: 3
   Melodies:
   - melody:
