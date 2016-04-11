@@ -12,9 +12,9 @@ public class GameManager : MonoBehaviour
     public AudioSource ErrorSound;
     public AudioSource CorrectSound;
 
-    public IEnumerator<Level> CurrentLevel;
+    public IEnumerator<GameObject> CurrentLevel;
 
-    public List<Level> Levels = new List<Level>();
+    public List<GameObject> Levels = new List<GameObject>();
 
     private void Start()
     {
@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
 
     public void NextLevel()
     {
+        CurrentLevel.Current.SetActive(false);
         if (!CurrentLevel.MoveNext())
         {
             // No more levels to play. Restarting.
@@ -74,19 +75,22 @@ public class GameManager : MonoBehaviour
         }
 
         // Start the next level.
-        CurrentLevel.Current.Play();
+        CurrentLevel.Current.SetActive(true);
     }
 
     public void StartGame()
     {
+        foreach (var level in Levels)
+        {
+            level.SetActive(false);
+        }
         CurrentLevel = Levels.GetEnumerator();
         CurrentLevel.MoveNext();
-        CurrentLevel.Current.Play();
+        CurrentLevel.Current.SetActive(true);
     }
 
     public void PressedButton(SoundButtonController button)
     {
-        if (!ControlVoicePlaying()) CurrentLevel.Current.HandleInput(button);
         button.Activate();
     }
 
