@@ -117,10 +117,7 @@ public class AcoordLevel : MonoBehaviour
         VoicePlayer.clip = FindTonerne;
         VoicePlayer.Play();
 
-        if (VoicePlayer.isPlaying)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(VoicePlayer.clip.length);
 
         //Stop everything so the player can start playing
         foreach (var tune in Tunes)

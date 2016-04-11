@@ -23,6 +23,19 @@ public class InputController : MonoBehaviour
         HandleMouse();
     }
 
+
+    private void OnDisable()
+    {
+        foreach (var button in _currentHovers.Values)
+        {
+            GameManager.Game.ReleasedButton(button);
+        }
+        _currentHovers.Clear();
+        if(_currentMouseHover)
+            GameManager.Game.ReleasedButton(_currentMouseHover);
+        _currentMouseHover = null;
+    }
+
     private void HandleTouches()
     {
         if (Input.touchCount <= 0)
