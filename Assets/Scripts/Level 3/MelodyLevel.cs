@@ -22,7 +22,7 @@ namespace Level_3
         public int CorrectMelody; // This could be private just to see that it take a new chord every time it plays
 
         //Voice Clips
-        public AudioClip EfterlignMelodien, ForkertMelodi;
+        public AudioClip EfterlignMelodien, ForkertMelodi, Runde2;
 
         //list of the Hovers on the buttons
         public GameObject[] Hovers;
@@ -125,6 +125,21 @@ namespace Level_3
             _ic.enabled = false;
             _introRunning = true;
             //Choose new Correct Chord
+
+            if (AmountOfLvlCompleted == 0 && Runde2 != null)
+            {
+                VoicePlayer.clip = Runde2;
+                VoicePlayer.Play();
+
+                yield return new WaitForSeconds(VoicePlayer.clip.length + 0.5f);
+                VoicePlayer.Stop();
+            }
+
+            VoicePlayer.clip = EfterlignMelodien;
+            VoicePlayer.Play();
+
+            yield return new WaitForSeconds(VoicePlayer.clip.length+0.5f);
+
             if (_levelCompleted)
             {
                 CorrectMelody = Random.Range(0, Melodies.Length);
@@ -148,12 +163,6 @@ namespace Level_3
                     Tunes[i].Stop();
                 }
             }
-
-
-            VoicePlayer.clip = EfterlignMelodien;
-            VoicePlayer.Play();
-
-            yield return new WaitForSeconds(VoicePlayer.clip.length);
 
             _intro = false;
             _introRunning = false;
