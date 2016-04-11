@@ -1,64 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class AcoordLevel : MonoBehaviour {
+public class AcoordLevel : MonoBehaviour
+{
+    public int _correctMelody; // This could be private just to see that it take a new chord every time it plays
+    private bool _endingRunning; // Is the ending running
 
-    //Used to be able to play both sounds at once
-    public AudioSource Tune1, Tune2;
+    private bool _error; //Did the player make an error e.g. holding the wrong button
+    private bool _intro = true; //Should the script give us a intro
+    private bool _introRunning; // Is the intro running
+    private bool _levelCompleted = true; // Used to make a new Chord to find 
+    public int AmountOfLvlCompleted;
 
-    //Playing voice sounds
-    public AudioSource VoicePlayer;
+    public Chord[] Chords;
 
     //Voice Clips
     public AudioClip FindTonerne, ForkerteToner;
 
-    //Nested list with chords provided by benjamin
-    [System.Serializable]
-    public struct Chord
-    {
-        public AudioClip[] chord;
-    }
-
-    public Chord[] Chords;
-
     //list of the Hovers on the buttons
     public GameObject[] Hovers;
 
-
-    public int _correctMelody; // This could be private just to see that it take a new chord every time it plays
-
     public int TimesToCompleteLevel = 2;
-    public int AmountOfLvlCompleted = 0;
-    private bool _levelCompleted = true; // Used to make a new Chord to find 
-    private bool _intro = true; //Should the script give us a intro
-    private bool _introRunning = false; // Is the intro running
-    private bool _endingRunning = false; // Is the ending running
 
-    private bool _error = false; //Did the player make an error e.g. holding the wrong button
+    //Used to be able to play both sounds at once
+    public AudioSource[] Tunes;
+
+    //Playing voice sounds
+    public AudioSource VoicePlayer;
 
     // Looks if all the chords created in the inspector is filled and does not have the same tunes to play twise
-    void Start () {
-
+    private void Start()
+    {
         AmountOfLvlCompleted = 0;
 
-        for (int i = 0; i < Chords.Length; i++)
+        if (Chords.Any(t => !Chords.All(c => c.chord.All(a => a != null))))
         {
-            if (!(Chords[i].chord[0] && Chords[i].chord[1]))
-            {
-                throw new System.ApplicationException("Some Chords havent been set");
-            }
-            if (Chords[i].chord[0] == Chords[i].chord[1])
-            {
-                throw new System.ApplicationException("Some Chords have 2 of the same tunes");
-            }
+            throw new ApplicationException("Some Chords havent been set");
         }
-	}
-	
-	void Update () {
+    }
+
+    private void Update()
+    {
         //if we have completed the lvl enough times stop requesting the player to play it
-        if(AmountOfLvlCompleted >= TimesToCompleteLevel)
+        if (AmountOfLvlCompleted >= TimesToCompleteLevel)
         {
+            GameManager.Game.NextLevel();
             return;
         }
         // If we have conpleted or started the level and need a new intro get it
@@ -73,43 +62,28 @@ public class AcoordLevel : MonoBehaviour {
         }
 
         //reset the active hover count
-        int _activeHoverCount = 0;
+        var activeHoverCount = Hovers.Count(hover => hover.activeInHierarchy);
 
-        //Counting the amount of active hovers
-        foreach (GameObject hover in Hovers)
-        {
-            if (hover == isActiveAndEnabled)
-            {
-                _activeHoverCount++;
-            }
-        }
+        Debug.Log(activeHoverCount);
+
         //If we have more active hovers then 2 then its wrong since there is only going to be 2 for any given chord
-        if (_activeHoverCount != 2)
+        if (activeHoverCount != Tunes.Length)
         {
             return;
         }
         //HER HVIS MAN HAR PRØVET FOR MANGE GANGE AFSPIL INTRO IGEN DEN VÆLGER IKKE EN NY MELODI DA _levelCompleted IKKE BLIVER SAT TIL true
 
 
-        //Check if the enabled hovers have the correct audio files
-        foreach (GameObject hover in Hovers)
-        {
-            if(hover == isActiveAndEnabled)
-            {
-                // The hover which is active has a parent and that parents audiosource must have the name of either the correct tunes if not then the wrong button must be active
-                if (!(transform.parent.GetComponent<AudioSource>().name == Chords[_correctMelody].chord[0].name || transform.parent.GetComponent<AudioSource>().name == Chords[_correctMelody].chord[1].name))
-                {
-                    _error = true;
-                }
-            }
-        }
-
         //If we saw no errors and the correct number of hovers are active then we must have activated the correct buttons
-        if(!_error && _activeHoverCount == 2)
+        if (Hovers
+            .Where(
+                hover =>
+                    hover.activeInHierarchy).All(activeHover => Chords[_correctMelody].chord.Any(
+                        c => c.name == activeHover.GetComponentInParent<AudioSource>().clip.name)))
         {
             StartCoroutine(Ending());
         }
-	}
+    }
 
     //Sets up the game
     private IEnumerator Intro()
@@ -122,26 +96,28 @@ public class AcoordLevel : MonoBehaviour {
             _levelCompleted = false;
         }
 
-        // Play first tune
-        Tune1.clip = Chords[_correctMelody].chord[0];
-        Tune1.Play();
-        yield return new WaitForSeconds(0.5f);
+        // Play Tunes
+        for (var i = 0; i < Chords[_correctMelody].chord.Length; i++)
+        {
+            Tunes[i].clip = Chords[_correctMelody].chord[i];
+            Tunes[i].Play();
+            yield return new WaitForSeconds(0.5f);
+        }
 
-        //Play secound tune on top of the first
-        Tune2.clip = Chords[_correctMelody].chord[1];
-        Tune2.Play();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.5f);
 
         VoicePlayer.clip = FindTonerne;
         VoicePlayer.Play();
 
-        if(VoicePlayer.isPlaying)
+        if (VoicePlayer.isPlaying)
         {
             yield return null;
         }
+
         //Stop everything so the player can start playing
-        Tune1.Stop();
-        Tune2.Stop();
+        foreach (var tune in Tunes)
+            tune.Stop();
+
         _intro = false;
         _introRunning = false;
         yield return null;
@@ -169,5 +145,11 @@ public class AcoordLevel : MonoBehaviour {
 
         yield return null;
     }
-}
 
+    //Nested list with chords provided by benjamin
+    [Serializable]
+    public struct Chord
+    {
+        public AudioClip[] chord;
+    }
+}
