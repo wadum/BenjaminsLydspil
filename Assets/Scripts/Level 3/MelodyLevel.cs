@@ -121,9 +121,9 @@ namespace Level_3
             {
                 CorrectMelody = Random.Range(0, Melodies.Length);
 
-                for (var i = 0; i < Melodies[CorrectMelody].melody.Length; i++)
+                for (var i = 0; i < LengthOfTuneSequence; i++)
                 {
-                    Tunes[i].clip = Melodies[CorrectMelody].melody[i];
+                    Tunes[i].clip = Melodies[CorrectMelody].melody[Random.Range(0, Melodies[CorrectMelody].melody.Length)];
                         //Choose at random the tunes from the correct melody section
                     Tunes[i].Play();
                     yield return new WaitForSeconds(1f);
