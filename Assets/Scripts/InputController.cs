@@ -28,11 +28,11 @@ public class InputController : MonoBehaviour
     {
         foreach (var button in _currentHovers.Values)
         {
-            GameManager.Game.ReleasedButton(button);
+            GameManager.Game.ReleasedButton(button, 2f);
         }
         _currentHovers.Clear();
         if(_currentMouseHover)
-            GameManager.Game.ReleasedButton(_currentMouseHover);
+            GameManager.Game.ReleasedButton(_currentMouseHover, 2f);
         _currentMouseHover = null;
     }
 

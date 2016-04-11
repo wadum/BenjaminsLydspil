@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Game;
+    public AudioSource CorrectSound;
 
     public AudioSource CorrectVoice;
-    public AudioSource WrongVoice;
-
-    public AudioSource ErrorSound;
-    public AudioSource CorrectSound;
 
     public IEnumerator<GameObject> CurrentLevel;
 
+    public AudioSource ErrorSound;
+
     public List<GameObject> Levels = new List<GameObject>();
+    public AudioSource WrongVoice;
 
     private void Start()
     {
@@ -98,8 +99,17 @@ public class GameManager : MonoBehaviour
         button.Activate();
     }
 
-    public void ReleasedButton(SoundButtonController button)
+    public void ReleasedButton(SoundButtonController button, float delay = 0)
     {
+        if (delay > 0)
+            StartCoroutine(DelayedRelease(button, delay));
+        else
+            button.Deactivate();
+    }
+
+    private static IEnumerator DelayedRelease(SoundButtonController button, float delay)
+    {
+        yield return new WaitForSeconds(delay);
         button.Deactivate();
     }
 }
