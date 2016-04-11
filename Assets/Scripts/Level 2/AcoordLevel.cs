@@ -40,6 +40,10 @@ public class AcoordLevel : MonoBehaviour
         {
             throw new ApplicationException("Some Chords havent been set");
         }
+        if (Chords.Any(t => !Chords.All(c => c.chord.Distinct().ToList().Count == c.chord.Length)))
+        {
+            throw new ApplicationException("Some Chords have 2 of the same tunes");
+        }
     }
 
     private void Update()
