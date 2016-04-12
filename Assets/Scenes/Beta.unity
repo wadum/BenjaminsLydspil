@@ -1560,7 +1560,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1815,7 +1815,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -2478,7 +2478,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -2673,7 +2673,7 @@ MonoBehaviour:
   CorrectMelody: 0
   FindTonerne: {fileID: 8300000, guid: 813b4edf2d8ce744ea3c3129aab47ae9, type: 3}
   ForkerteToner: {fileID: 8300000, guid: 0524d736b8667604598708b1dc9fca74, type: 3}
-  Runde1: {fileID: 0}
+  Runde1: {fileID: 8300000, guid: 3bc40455ceae26b428cdfeefbf44a1a8, type: 3}
   Hovers:
   - {fileID: 1657112386}
   - {fileID: 268029301}
@@ -3231,7 +3231,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -4515,7 +4515,7 @@ MonoBehaviour:
   CorrectMelody: 0
   EfterlignMelodien: {fileID: 8300000, guid: 88c684aa9bf06084fa6d6f2ef135d821, type: 3}
   ForkertMelodi: {fileID: 8300000, guid: 76c5fdfa9a58cc14b92856856c1245b1, type: 3}
-  Runde2: {fileID: 8300000, guid: 3bc40455ceae26b428cdfeefbf44a1a8, type: 3}
+  Runde2: {fileID: 8300000, guid: bf998d72da348fe4b84a7563a054c321, type: 3}
   Hovers:
   - {fileID: 1657112386}
   - {fileID: 268029301}
@@ -4685,7 +4685,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -5399,4 +5399,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd5eb505a7fe4064a13f36c22b8881e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HelpDelay: 3
+  HelpDelay: 5
