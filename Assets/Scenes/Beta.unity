@@ -2262,7 +2262,7 @@ MonoBehaviour:
   - {fileID: 362345824}
   - {fileID: 553513391}
   - {fileID: 568629383}
-  TimesToCompleteLevel: 2
+  TimesToCompleteLevel: 4
   Tunes:
   - {fileID: 1026402244}
   VoicePlayer: {fileID: 1026402242}
@@ -2685,7 +2685,7 @@ MonoBehaviour:
   - {fileID: 362345824}
   - {fileID: 553513391}
   - {fileID: 568629383}
-  TimesToCompleteLevel: 2
+  TimesToCompleteLevel: 4
   Tunes:
   - {fileID: 1173577729}
   - {fileID: 1173577730}
