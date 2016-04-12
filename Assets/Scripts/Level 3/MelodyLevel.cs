@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace Level_3
 {
-    public class MelodyLevel : MonoBehaviour
+    public class MelodyLevel : NeedHelp
     {
         private bool _endingRunning; // Is the ending running
 
@@ -191,6 +191,23 @@ namespace Level_3
             }
 
             yield return null;
+        }
+
+        public override IEnumerator PlayHelp()
+        {
+            _ic.enabled = false;
+            _introRunning = true;
+
+            for (var i = 0; i < LengthOfTuneSequence; i++)
+            {
+                //Choose at random the tunes from the correct melody section
+                Tunes[i].Play();
+                yield return new WaitForSeconds(1f);
+                Tunes[i].Stop();
+            }
+
+            _ic.enabled = true;
+            _introRunning = false;
         }
 
         //Nested list with chords provided by benjamin

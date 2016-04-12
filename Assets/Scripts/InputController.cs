@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
+    public float HelpDelay = 5;
+
     private readonly Dictionary<int, SoundButtonController> _currentHovers =
         new Dictionary<int, SoundButtonController>();
 
     private SoundButtonController[] _buttons;
 
     private SoundButtonController _currentMouseHover;
+
+    private float _lastInput;
 
     private void Start()
     {
@@ -21,8 +25,16 @@ public class InputController : MonoBehaviour
     {
         HandleTouches();
         HandleMouse();
+        if (_lastInput + HelpDelay < Time.time)
+        {
+            GameManager.Game.PlayHelp();
+        }
     }
 
+    private void OnEnable()
+    {
+        _lastInput = Time.time;
+    }
 
     private void OnDisable()
     {
@@ -59,6 +71,7 @@ public class InputController : MonoBehaviour
                 if (!unusedButton) continue;
                 GameManager.Game.ReleasedButton(unusedButton);
             }
+            _lastInput = Time.time;
         }
     }
 
@@ -119,6 +132,7 @@ public class InputController : MonoBehaviour
 
             GameManager.Game.PressedButton(button);
             _currentMouseHover = button;
+            _lastInput = Time.time;
         }
     }
 

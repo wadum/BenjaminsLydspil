@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace Level_2
 {
-    public class AcoordLevel : MonoBehaviour
+    public class AcoordLevel : NeedHelp
     {
         private bool _endingRunning; // Is the ending running
 
@@ -161,6 +161,29 @@ namespace Level_2
         public struct Chord
         {
             public AudioClip[] chord;
+        }
+
+        public override IEnumerator PlayHelp()
+        {
+            _ic.enabled = false;
+            _introRunning = true;
+
+            for (var i = 0; i < Chords[CorrectMelody].chord.Length; i++)
+            {
+                Tunes[i].clip = Chords[CorrectMelody].chord[i];
+                Tunes[i].Play();
+                yield return new WaitForSeconds(0.5f);
+
+            }
+            yield return new WaitForSeconds(1);
+
+            foreach (var tune in Tunes)
+            {
+                tune.Stop();
+            }
+
+            _ic.enabled = true;
+            _introRunning = false;
         }
     }
 }

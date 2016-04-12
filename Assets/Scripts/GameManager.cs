@@ -10,13 +10,13 @@ public class GameManager : MonoBehaviour
 
     public AudioSource CorrectVoice;
 
-    public IEnumerator<GameObject> CurrentLevel;
+    public IEnumerator<NeedHelp> CurrentLevel;
 
     public AudioSource ErrorSound;
 
     public AudioSource WelcomeToSoundGame;
 
-    public List<GameObject> Levels = new List<GameObject>();
+    public List<NeedHelp> Levels = new List<NeedHelp>();
     public AudioSource WrongVoice;
 
     private InputController _ic;
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour
 
     public void NextLevel()
     {
-        CurrentLevel.Current.SetActive(false);
+        CurrentLevel.Current.gameObject.SetActive(false);
         if (!CurrentLevel.MoveNext())
         {
             // No more levels to play. Restarting.
@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Start the next level.
-        CurrentLevel.Current.SetActive(true);
+        CurrentLevel.Current.gameObject.SetActive(true);
     }
 
     public IEnumerator StartGame()
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         _ic.enabled = false;
         foreach (var level in Levels)
         {
-            level.SetActive(false);
+            level.gameObject.SetActive(false);
         }
 
         WelcomeToSoundGame.Play();
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
 
         CurrentLevel = Levels.GetEnumerator();
         CurrentLevel.MoveNext();
-        CurrentLevel.Current.SetActive(true);
+        CurrentLevel.Current.gameObject.SetActive(true);
 
         _ic.enabled = true;
 
@@ -131,5 +131,10 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         button.Deactivate();
+    }
+
+    public void PlayHelp()
+    {
+        StartCoroutine(CurrentLevel.Current.PlayHelp());
     }
 }

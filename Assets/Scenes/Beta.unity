@@ -1093,9 +1093,9 @@ MonoBehaviour:
   ErrorSound: {fileID: 585842038}
   WelcomeToSoundGame: {fileID: 585842039}
   Levels:
-  - {fileID: 1026402240}
-  - {fileID: 1173577726}
-  - {fileID: 1824942287}
+  - {fileID: 1026402245}
+  - {fileID: 1173577728}
+  - {fileID: 1824942292}
   WrongVoice: {fileID: 585842036}
 --- !u!82 &585842036
 AudioSource:
@@ -5399,3 +5399,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd5eb505a7fe4064a13f36c22b8881e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HelpDelay: 3
