@@ -13,10 +13,9 @@ namespace Level_3
         private InputController _ic;
 
         private bool _intro = true; //Should the script give us a intro
+        private bool _introPlayed;
         private bool _introRunning; // Is the intro running
         private bool _levelCompleted = true; // Used to make a new Chord to find 
-
-        public int Tuneprogression;
         public int AmountOfLvlCompleted;
 
         public int CorrectMelody; // This could be private just to see that it take a new chord every time it plays
@@ -29,6 +28,10 @@ namespace Level_3
         public int LengthOfTuneSequence = 3;
 
         public Melody[] Melodies;
+
+        public bool PlayIntroBetweenCompletions;
+
+        public int Tuneprogression;
 
         //public int TimesToCompleteLevel = 2;
 
@@ -87,16 +90,21 @@ namespace Level_3
                 .Where(
                     hover =>
                         hover.activeInHierarchy && Tuneprogression > 0 &&
-                        hover.GetComponentInParent<AudioSource>().clip.name == Tunes[Tuneprogression-1].clip.name).ToList().Count >
+                        hover.GetComponentInParent<AudioSource>().clip.name == Tunes[Tuneprogression - 1].clip.name)
+                .ToList()
+                .Count >
                 0)
             {
                 // pass
-            } else if (Hovers
-               .Where(
-                   hover =>
-                       hover.activeInHierarchy &&
-                       hover.GetComponentInParent<AudioSource>().clip.name != Tunes[Tuneprogression].clip.name).ToList().Count >
-               0)
+            }
+            else if (Hovers
+                .Where(
+                    hover =>
+                        hover.activeInHierarchy &&
+                        hover.GetComponentInParent<AudioSource>().clip.name != Tunes[Tuneprogression].clip.name)
+                .ToList()
+                .Count >
+                     0)
             {
                 Tuneprogression = 0;
             }
@@ -106,7 +114,9 @@ namespace Level_3
                 .Where(
                     hover =>
                         hover.activeInHierarchy &&
-                        hover.GetComponentInParent<AudioSource>().clip.name == Tunes[Tuneprogression].clip.name).ToList().Count >
+                        hover.GetComponentInParent<AudioSource>().clip.name == Tunes[Tuneprogression].clip.name)
+                .ToList()
+                .Count >
                 0)
             {
                 Tuneprogression++;
@@ -135,10 +145,14 @@ namespace Level_3
                 VoicePlayer.Stop();
             }
 
-            VoicePlayer.clip = EfterlignMelodien;
-            VoicePlayer.Play();
+            if (PlayIntroBetweenCompletions || !_introPlayed)
+            {
+                VoicePlayer.clip = EfterlignMelodien;
+                VoicePlayer.Play();
 
-            yield return new WaitForSeconds(VoicePlayer.clip.length+0.5f);
+                yield return new WaitForSeconds(VoicePlayer.clip.length + 0.5f);
+                _introPlayed = true;
+            }
 
             if (_levelCompleted)
             {
@@ -146,8 +160,9 @@ namespace Level_3
 
                 for (var i = 0; i < LengthOfTuneSequence; i++)
                 {
-                    Tunes[i].clip = Melodies[CorrectMelody].melody[Random.Range(0, Melodies[CorrectMelody].melody.Length)];
-                        //Choose at random the tunes from the correct melody section
+                    Tunes[i].clip =
+                        Melodies[CorrectMelody].melody[Random.Range(0, Melodies[CorrectMelody].melody.Length)];
+                    //Choose at random the tunes from the correct melody section
                     Tunes[i].Play();
                     yield return new WaitForSeconds(1f);
                     Tunes[i].Stop();

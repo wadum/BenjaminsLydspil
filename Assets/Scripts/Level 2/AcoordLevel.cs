@@ -13,10 +13,10 @@ namespace Level_2
         private InputController _ic;
 
         private bool _intro = true; //Should the script give us a intro
+        private bool _introPlayed;
         private bool _introRunning; // Is the intro running
         private bool _levelCompleted = true; // Used to make a new Chord to find 
         public int AmountOfLvlCompleted;
-
 
         public Chord[] Chords;
         public int CorrectMelody; // This could be private just to see that it take a new chord every time it plays
@@ -26,6 +26,8 @@ namespace Level_2
 
         //list of the Hovers on the buttons
         public GameObject[] Hovers;
+
+        public bool PlayIntroBetweenCompletions;
 
         public int TimesToCompleteLevel = 2;
 
@@ -114,10 +116,14 @@ namespace Level_2
                 VoicePlayer.Stop();
             }
 
-            VoicePlayer.clip = FindTonerne;
-            VoicePlayer.Play();
+            if (PlayIntroBetweenCompletions || !_introPlayed)
+            {
+                VoicePlayer.clip = FindTonerne;
+                VoicePlayer.Play();
 
-            yield return new WaitForSeconds(VoicePlayer.clip.length+0.5f);
+                yield return new WaitForSeconds(VoicePlayer.clip.length + 0.5f);
+                _introPlayed = true;
+            }
 
             // Play Tunes
             for (var i = 0; i < Chords[CorrectMelody].chord.Length; i++)
@@ -156,13 +162,6 @@ namespace Level_2
             yield return null;
         }
 
-        //Nested list with chords provided by benjamin
-        [Serializable]
-        public struct Chord
-        {
-            public AudioClip[] chord;
-        }
-
         public override IEnumerator PlayHelp()
         {
             _ic.enabled = false;
@@ -173,7 +172,6 @@ namespace Level_2
                 Tunes[i].clip = Chords[CorrectMelody].chord[i];
                 Tunes[i].Play();
                 yield return new WaitForSeconds(0.5f);
-
             }
             yield return new WaitForSeconds(1);
 
@@ -184,6 +182,13 @@ namespace Level_2
 
             _ic.enabled = true;
             _introRunning = false;
+        }
+
+        //Nested list with chords provided by benjamin
+        [Serializable]
+        public struct Chord
+        {
+            public AudioClip[] chord;
         }
     }
 }
