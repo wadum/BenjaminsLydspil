@@ -100,10 +100,7 @@ public class GameManager : MonoBehaviour
 
         WelcomeToSoundGame.Play();
 
-        while (WelcomeToSoundGame.isPlaying)
-        {
-            yield return null;
-        }
+        yield return new WaitForSeconds(WelcomeToSoundGame.clip.length+0.5f);
 
         CurrentLevel = Levels.GetEnumerator();
         CurrentLevel.MoveNext();
